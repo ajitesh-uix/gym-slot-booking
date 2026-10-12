@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+enum BookingStatus {
+  CONFIRMED
+  WAITLISTED
+  CANCELLED
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  role      Role      @default(MEMBER)
+  createdAt DateTime  @default(now())
+  sessions  Session[] @relation("AdminSessions")
+  bookings  Booking[]
+}
+
+model Session {
+  id          Int       @id @default(autoincrement())
+  title       String
+  startTime   DateTime  @unique // prevents duplicate start times
+  maxCapacity Int       @default(20)
+  adminId     Int
+  admin       User      @relation("AdminSessions", fields: [adminId], references: [id])
+  createdAt   DateTime  @default(now())
+  bookings    Booking[]
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  sessionId Int
+  status    BookingStatus @default(CONFIRMED)
+  createdAt DateTime      @default(now())
+  user      User          @relation(fields: [userId], references: [id])
+  session   Session       @relation(fields: [sessionId], references: [id])
+  checkin   CheckIn?
+}
+
+model CheckIn {
+  id        Int      @id @default(autoincrement())
+  bookingId Int      @unique
+  codeHash  String // SHA-256 hash of the one-time code
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+}

@@ -1,6 +1,12 @@
 import './App.css';
+import Auth from './Auth';
+import { useState } from 'react';
 
 function App() {
+  const [showAuth, setShowAuth] = useState(false);
+  if (showAuth) {
+    return <Auth />;
+  }
   return (
     <div className="app">
       <nav className="navbar">
@@ -10,8 +16,9 @@ function App() {
           <a href="#slots">Book Slots</a>
           <a href="#about">About</a>
         </div>
-        <button className="login">Login</button>
+        <button className="login" onClick={() => setShowAuth(true)}>login</button>
       </nav>
+      {showAuth && <Auth />}
 
       <main className="hero" id="home">
         <div className="hero-text">
