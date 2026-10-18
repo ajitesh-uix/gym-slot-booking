@@ -5,7 +5,11 @@
   "scripts": {
     "dev": "node src/server.js",
     "seed": "node prisma/seed.js",
-    "test": "jest --testPathPattern=tests"
+    "test": "jest --testPathPattern=tests --runInBand"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 120000
   },
   "prisma": {
     "seed": "node prisma/seed.js"

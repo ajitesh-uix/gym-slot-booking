@@ -84,33 +84,33 @@ frontend changes.
   - [x] 6.7 Cancel one of the 20 confirmed bookings and verify the waitlisted booking is promoted to CONFIRMED (check `promoted` field in response)
   Requirements: 10, 11, 12
 
-- [ ] 7. Write Property-Based Test for Check-In Round-Trip Integrity
+- [x] 7. Write Property-Based Test for Check-In Round-Trip Integrity
   Install fast-check and Jest as dev dependencies, then write a property-based test that verifies the generate → validate round-trip always succeeds for valid CONFIRMED bookings, and that a second validate always returns "Code already used".
   - [x] 7.1 Install `fast-check` and `jest` as dev dependencies in `backend/` (`npm install --save-dev fast-check jest @jest/globals`)
   - [x] 7.2 Add a `"test"` script to `backend/package.json`: `"test": "jest --testPathPattern=tests"`
-  - [ ] 7.3 Create `backend/tests/checkin.property.test.js` with a property-based test that uses `fc.assert` / `fc.property`, sets up a CONFIRMED booking whose session `startTime` is within the current one-hour window, calls `POST /api/checkin/generate/:bookingId` to get the `code`, immediately calls `POST /api/checkin/validate` with `{ code, bookingId }` and asserts `200 { "message": "Check-in successful!" }`, then calls validate again with the same inputs and asserts `400 { "error": "Code already used" }`
-  - [~] 7.4 Run `npm test` in `backend/` and confirm the property-based test passes with no counterexamples reported by fast-check
+  - [x] 7.3 Create `backend/tests/checkin.property.test.js` with a property-based test that uses `fc.assert` / `fc.property`, sets up a CONFIRMED booking whose session `startTime` is within the current one-hour window, calls `POST /api/checkin/generate/:bookingId` to get the `code`, immediately calls `POST /api/checkin/validate` with `{ code, bookingId }` and asserts `200 { "message": "Check-in successful!" }`, then calls validate again with the same inputs and asserts `400 { "error": "Code already used" }`
+  - [x] 7.4 Run `npm test` in `backend/` and confirm the property-based test passes with no counterexamples reported by fast-check
   Requirements: 15
 
-- [ ] 8. Add Vite API Proxy
+- [x] 8. Add Vite API Proxy
   Edit `frontend/vite.config.js` to forward all `/api/*` requests to the Express backend so that `fetch('/api/...')` calls work correctly from the browser during development.
-  - [~] 8.1 Open `frontend/vite.config.js` and add a `server.proxy` entry: `'/api': { target: 'http://localhost:3001', changeOrigin: true }`
-  - [~] 8.2 Start both servers (`npm run dev` in `backend/` and `frontend/`), then open `http://localhost:5173/api/health` in the browser and verify it returns `{ "status": "ok" }`
+  - [x] 8.1 Open `frontend/vite.config.js` and add a `server.proxy` entry: `'/api': { target: 'http://localhost:3001', changeOrigin: true }`
+  - [x] 8.2 Start both servers (`npm run dev` in `backend/` and `frontend/`), then open `http://localhost:5173/api/health` in the browser and verify it returns `{ "status": "ok" }`
   Requirements: 16
 
-- [ ] 9. Wire Auth.jsx to the Backend API
+- [x] 9. Wire Auth.jsx to the Backend API
   Replace the no-op form submit in `frontend/src/Auth.jsx` with controlled state and a real `handleSubmit` that calls the backend, persists credentials on success, and calls an `onLogin` prop to hand off to the Dashboard.
-  - [~] 9.1 Add controlled state: `name`, `email`, `password`, `error` (string or null), `loading` (boolean); bind each input to its corresponding state value via `value` / `onChange`
-  - [~] 9.2 Implement `handleSubmit(e)`: prevent default, set `loading = true` and `error = null`, call `POST /api/auth/register` or `POST /api/auth/login`, on 2xx store `token` and `user` in `localStorage` and call `onLogin(user)`, on 4xx/5xx set `error = data.error`, always set `loading = false` in a `finally` block
-  - [~] 9.3 Display the `error` string inside the form when it is non-null, and set `disabled={loading}` on the submit button
-  - [~] 9.4 Manually test: register a new user, log in as that user, log in with wrong password (confirm inline error displays), and verify the JWT appears in browser DevTools → Application → Local Storage
+  - [x] 9.1 Add controlled state: `name`, `email`, `password`, `error` (string or null), `loading` (boolean); bind each input to its corresponding state value via `value` / `onChange`
+  - [x] 9.2 Implement `handleSubmit(e)`: prevent default, set `loading = true` and `error = null`, call `POST /api/auth/register` or `POST /api/auth/login`, on 2xx store `token` and `user` in `localStorage` and call `onLogin(user)`, on 4xx/5xx set `error = data.error`, always set `loading = false` in a `finally` block
+  - [x] 9.3 Display the `error` string inside the form when it is non-null, and set `disabled={loading}` on the submit button
+  - [x] 9.4 Manually test: register a new user, log in as that user, log in with wrong password (confirm inline error displays), and verify the JWT appears in browser DevTools → Application → Local Storage
   Requirements: 16
 
-- [ ] 10. Create Dashboard Component and Wire App.jsx
+- [x] 10. Create Dashboard Component and Wire App.jsx
   Create `frontend/src/Dashboard.jsx` as the post-login session-listing view and update `frontend/src/App.jsx` to track auth state and conditionally render the Dashboard or the landing page.
-  - [~] 10.1 Create `frontend/src/Dashboard.jsx` that reads the JWT from `localStorage`, fetches `GET /api/sessions` with an `Authorization: Bearer <token>` header, renders each session's `title`, formatted `startTime`, and `availableSlots`, and includes a Logout button that clears `localStorage` and resets auth state
-  - [~] 10.2 Update `frontend/src/App.jsx` to add `user` state initialised from `localStorage` on first render (or `null`), pass an `onLogin(user)` callback to `<Auth />`, and render `<Dashboard />` when `user` is non-null, otherwise render the existing landing / Auth flow
-  - [~] 10.3 Manually verify the full end-to-end flow: land on homepage → navigate to Auth → log in → see Dashboard with sessions → click Logout → return to homepage
+  - [x] 10.1 Create `frontend/src/Dashboard.jsx` that reads the JWT from `localStorage`, fetches `GET /api/sessions` with an `Authorization: Bearer <token>` header, renders each session's `title`, formatted `startTime`, and `availableSlots`, and includes a Logout button that clears `localStorage` and resets auth state
+  - [x] 10.2 Update `frontend/src/App.jsx` to add `user` state initialised from `localStorage` on first render (or `null`), pass an `onLogin(user)` callback to `<Auth />`, and render `<Dashboard />` when `user` is non-null, otherwise render the existing landing / Auth flow
+  - [x] 10.3 Manually verify the full end-to-end flow: land on homepage → navigate to Auth → log in → see Dashboard with sessions → click Logout → return to homepage
   Requirements: 16
 
 ## Notes

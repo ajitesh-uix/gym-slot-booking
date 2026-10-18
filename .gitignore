@@ -1,2 +1,26 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment / secrets
 .env
+.env.local
+.env.*.local
+backend/.env
+
+# Build / generated
+dist/
+build/
+coverage/
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Prisma / tooling
+backend/prisma/*.db
+backend/prisma/*.db-journal
+
+# Editor
+.vscode/
+.idea/
+*.swp
